@@ -71,7 +71,7 @@ var tcs = []struct {
 				Next: &ListNode{
 					Val: 1,
 					Next: &ListNode{
-						Val: 3,
+						Val: 4,
 						Next: &ListNode{
 							Val:  5,
 							Next: nil,
@@ -86,8 +86,7 @@ var tcs = []struct {
 func Test_mergeTwoLists(t *testing.T) {
 	a := assert.New(t)
 	for _, item := range tcs {
-		output := mergeTwoLists(item.input1, item.input2)
-		PrintList(output)
+		output := reverseKGroup(item.input, item.n)
 		a.Equal(item.output, output)
 	}
 }

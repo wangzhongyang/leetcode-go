@@ -5,7 +5,8 @@ import (
 )
 
 func lenLongestFibSubseq(A []int) int {
-	return b(A)
+	//return b(A)
+	return dp(A)
 }
 
 func Max(a, b int) int {
@@ -41,4 +42,33 @@ func b(A []int) int {
 		}
 	}
 	return max
+}
+
+// 动态规划 if A[i] + A[j] == A[k]{ longest[j, k] = longest[i, j] + 1 }
+//Runtime: 60 ms, faster than 76.19% of Go online submissions for Length of Longest Fibonacci Subsequence.
+//Memory Usage: 4.2 MB, less than 100.00% of Go online submissions for Length of Longest Fibonacci Subsequence.
+func dp(A []int) int {
+	if len(A) < 3 {
+		return 0
+	}
+	n := len(A)
+	index, longest, ans := make(map[int]int), make(map[int]int), 0
+	for k, v := range A {
+		index[v] = k
+	}
+	for k := 0; k < n; k++ {
+		for j := 0; j < k; j++ {
+			if i, ok := index[A[k]-A[j]]; ok && i < j {
+				cand, ok := longest[i*n+j]
+				if ok {
+					cand += 1
+				} else {
+					cand = 3
+				}
+				longest[j*n+k] = cand
+				ans = Max(cand, ans)
+			}
+		}
+	}
+	return ans
 }

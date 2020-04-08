@@ -1,4 +1,4 @@
-package Q94_Binary_Tree_Inorder_Traversal
+package Q144_Binary_Tree_Preorder_Traversal
 
 import (
 	"testing"
@@ -10,22 +10,6 @@ var tcs = []struct {
 	input  *TreeNode
 	output []int
 }{
-	//{
-	//	input: &TreeNode{
-	//		Val:  1,
-	//		Left: nil,
-	//		Right: &TreeNode{
-	//			Val: 2,
-	//			Left: &TreeNode{
-	//				Val:   3,
-	//				Left:  nil,
-	//				Right: nil,
-	//			},
-	//			Right: nil,
-	//		},
-	//	},
-	//	output: []int{1, 3, 2},
-	//},
 	{
 		input: &TreeNode{
 			Val: 1,
@@ -51,14 +35,14 @@ var tcs = []struct {
 				},
 			},
 		},
-		output: []int{4, 2, 7, 5, 8, 1, 3, 6},
+		output: []int{1, 2, 4, 5, 7, 8, 3, 6},
 	},
 }
 
-func TestRecursive(t *testing.T) {
+func Test_preorderTraversal(t *testing.T) {
 	a := assert.New(t)
-	for _, v := range tcs {
-		res := inorderTraversal(v.input)
-		a.Equal(v.output, res)
+	for _, item := range tcs {
+		output := preorderTraversal(item.input)
+		a.Equal(output, item.output)
 	}
 }

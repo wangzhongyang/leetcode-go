@@ -1,4 +1,4 @@
-package Q144_Binary_Tree_Preorder_Traversal
+package Q145_Binary_Tree_Postorder_Traversal
 
 //Definition for a binary tree node.
 type TreeNode struct {
@@ -7,8 +7,8 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-//前序遍历
-func preorderTraversal(root *TreeNode) []int {
+//后序遍历
+func postorderTraversal(root *TreeNode) []int {
 	//return recursiveMain(root)
 	return iteration(root)
 }
@@ -33,24 +33,30 @@ func (s *Stack) IsEmpty() bool {
 }
 
 //迭代
-//Runtime: 0 ms, faster than 100.00% of Go online submissions for Binary Tree Preorder Traversal.
-//Memory Usage: 2 MB, less than 100.00% of Go online submissions for Binary Tree Preorder Traversal.
+//Runtime: 0 ms, faster than 100.00% of Go online submissions for Binary Tree Postorder Traversal.
+//Memory Usage: 2 MB, less than 100.00% of Go online submissions for Binary Tree Postorder Traversal.
 func iteration(root *TreeNode) []int {
 	s, res := new(Stack), make([]int, 0)
 	for root != nil || !s.IsEmpty() {
 		for root != nil {
-			res = append(res, root.Val)
 			s.Push(root)
 			root = root.Left
 		}
-		root = s.Pop().Right
+		temp := s.Pop()
+		root = temp.Right
+		if temp.Right != nil {
+			temp.Right = nil
+			s.Push(temp)
+		} else {
+			res = append(res, temp.Val)
+		}
 	}
 	return res
 }
 
-// 递归
-//Runtime: 0 ms, faster than 100.00% of Go online submissions for Binary Tree Preorder Traversal.
-//Memory Usage: 2 MB, less than 100.00% of Go online submissions for Binary Tree Preorder Traversal.
+//递归
+//Runtime: 0 ms, faster than 100.00% of Go online submissions for Binary Tree Postorder Traversal.
+//Memory Usage: 2 MB, less than 100.00% of Go online submissions for Binary Tree Postorder Traversal.
 func recursiveMain(root *TreeNode) []int {
 	res := make([]int, 0)
 	recursive(root, &res)
@@ -61,7 +67,7 @@ func recursive(root *TreeNode, res *[]int) {
 	if root == nil {
 		return
 	}
-	*res = append(*res, root.Val)
 	recursive(root.Left, res)
 	recursive(root.Right, res)
+	*res = append(*res, root.Val)
 }

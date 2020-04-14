@@ -1,5 +1,7 @@
 package Q111_Minimum_Depth_of_Binary_Tree
 
+import "math"
+
 //Definition for a binary tree node.
 type TreeNode struct {
 	Val   int
@@ -10,6 +12,13 @@ type TreeNode struct {
 func minDepth(root *TreeNode) int {
 	//return recursive(root)
 	return iteration(root)
+}
+
+func Min(a, b int) int {
+	if a > b {
+		return b
+	}
+	return a
 }
 
 type StackItem struct {
@@ -40,14 +49,23 @@ func (s *Stack) IsEmpty() bool {
 }
 
 // 迭代
+//Runtime: 4 ms, faster than 97.23% of Go online submissions for Minimum Depth of Binary Tree.
+//Memory Usage: 5.3 MB, less than 100.00% of Go online submissions for Minimum Depth of Binary Tree.
 func iteration(root *TreeNode) int {
-	min, s := 0, new(Stack)
-	for root != nil || !s.IsEmpty() {
-		for root != nil {
-
-			if s.IsEmpty() {
-
+	min, s := math.MaxInt64, new(Stack)
+	if root != nil {
+		s.Push(root, 1)
+	} else {
+		return 0
+	}
+	for !s.IsEmpty() {
+		temp := s.Pop()
+		if temp.Node != nil {
+			if temp.Node.Left == nil && temp.Node.Right == nil {
+				min = Min(min, temp.Depth)
 			}
+			s.Push(temp.Node.Left, temp.Depth+1)
+			s.Push(temp.Node.Right, temp.Depth+1)
 		}
 	}
 	return min
@@ -67,11 +85,4 @@ func recursive(root *TreeNode) int {
 		return recursive(root.Right) + 1
 	}
 	return Min(recursive(root.Left), recursive(root.Right)) + 1
-}
-
-func Min(a, b int) int {
-	if a > b {
-		return b
-	}
-	return a
 }

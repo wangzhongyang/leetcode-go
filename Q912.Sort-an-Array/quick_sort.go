@@ -2,8 +2,8 @@ package Q912_Sort_an_Array
 
 import "fmt"
 
-func sortArray(nums []int) []int {
-	quickSort(nums, 0, len(nums)-1)
+func quickSort(nums []int) []int {
+	quickSortRecursio(nums, 0, len(nums)-1)
 	return nums
 }
 
@@ -11,12 +11,12 @@ func swap(nums []int, l, r int) {
 	nums[l], nums[r] = nums[r], nums[l]
 }
 
-func quickSort(nums []int, left, right int) {
+func quickSortRecursio(nums []int, left, right int) {
 	if left < right {
 		index := partition(nums, left, right)
 		//fmt.Println(nums, left, index, right)
-		quickSort(nums, left, index-1)
-		quickSort(nums, index+1, right)
+		quickSortRecursio(nums, left, index-1)
+		quickSortRecursio(nums, index+1, right)
 	}
 }
 

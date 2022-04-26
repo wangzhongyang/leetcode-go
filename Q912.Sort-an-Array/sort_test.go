@@ -24,10 +24,18 @@ var tcs = []struct {
 	},
 }
 
-func Test_SortAnArray(t *testing.T) {
+func Test_QuickSort(t *testing.T) {
 	a := assert.New(t)
 	for _, item := range tcs {
-		output := sortArray(item.input)
+		output := quickSort(item.input)
+		a.Equal(item.output, output)
+	}
+}
+
+func Test_HeapSort(t *testing.T) {
+	a := assert.New(t)
+	for _, item := range tcs {
+		output := heapSort(item.input)
 		a.Equal(item.output, output)
 	}
 }

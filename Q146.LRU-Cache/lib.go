@@ -14,6 +14,62 @@ type List struct {
 	key, value int
 }
 
+func (this *LRUCache) Get(key int) int {
+	item, ok := this.m[key]
+	if !ok {
+		return -1
+	}
+	// 拼接当前节点的前后节点
+	this.rmItem(item)
+	// 当前节点放到队首
+	this.toHead(item)
+	return item.value
+}
+
+func (this *LRUCache) Put(key int, value int) {
+	item, ok := this.m[key]
+	if ok {
+		item.value = value
+		// 拼接当前节点的前后节点
+		this.rmItem(item)
+		// 当前节点放到队首
+		this.toHead(item)
+	} else {
+		item = &List{
+			key:   key,
+			value: value,
+		}
+		this.m[key] = item
+		this.cap++
+
+		// 当前节点放到队首
+		this.toHead(item)
+	}
+	// 是否超过长度
+	if this.cap > this.len {
+		// 删除最后一个
+		last := this.tail.prev
+		delete(this.m, last.key)
+		this.tail.prev = last.prev
+		last.prev.next = this.tail
+		this.cap--
+	}
+}
+
+func (this *LRUCache) toHead(item *List) {
+	headNext := this.head.next
+	this.head.next = item
+	item.next = headNext
+	item.prev = this.head
+	headNext.prev = item
+}
+
+func (this *LRUCache) rmItem(item *List) {
+	item1, item2 := item.prev, item.next
+	item1.next = item2
+	item2.prev = item1
+}
+
 // Constructor 在LeetCode上不稳定
 //Runtime: 556 ms, faster than 84.32% of Go online submissions for LRU Cache.
 //Memory Usage: 85.5 MB, less than 27.73% of Go online submissions for LRU Cache.
@@ -30,53 +86,6 @@ func Constructor(capacity int) LRUCache {
 	}
 }
 
-func (this *LRUCache) Get(key int) int {
-	node, ok := this.m[key]
-	if ok {
-		// 重新拼接双链表
-		node.prev.next = node.next
-		node.next.prev = node.prev
-		// 将该节点放到双链表的头部
-		node.next = this.head.next
-		this.head.next.prev = node
-		node.prev = this.head
-		this.head.next = node
-		return node.value
-	}
-	return -1
-}
-
-func (this *LRUCache) Put(key int, value int) {
-	if this.len == 0 {
-		return
-	}
-	node, ok := this.m[key]
-	if ok {
-		node.value = value
-		// 重新拼接双链表
-		node.prev.next = node.next
-		node.next.prev = node.prev
-	} else {
-		// 如果已满，删除最后一个
-		if this.cap == this.len {
-			delete(this.m, this.tail.prev.key)
-			last2 := this.tail.prev.prev // 倒数第二个
-			last2.next = this.tail
-			this.tail.prev = last2
-		} else {
-			this.cap++
-		}
-		node = initList(key, value)
-		this.m[key] = node
-	}
-	// 将该节点放到双链表的头部
-	secondNode := this.head.next
-	this.head.next = node
-	node.prev = this.head
-	secondNode.prev = node
-	node.next = secondNode
-}
-
 func initList(k, v int) *List {
 	return &List{
 		key:   k,
@@ -85,6 +94,7 @@ func initList(k, v int) *List {
 }
 
 func (this *LRUCache) Println() {
+	fmt.Print("缓存是：")
 	head := this.head.next
 	for head != nil && head != this.tail {
 		fmt.Print("[", head.key, ",", head.value, "]")

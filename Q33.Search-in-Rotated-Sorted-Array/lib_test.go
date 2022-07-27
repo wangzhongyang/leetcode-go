@@ -36,6 +36,21 @@ var tcs = []struct {
 		Target: 2,
 		Out:    3,
 	},
+	{
+		Nums:   []int{3, 5, 1},
+		Target: 3,
+		Out:    0,
+	},
+	{
+		Nums:   []int{4, 5, 6, 7, 0, 1, 2},
+		Target: 5,
+		Out:    1,
+	},
+	{
+		Nums:   []int{5, 1, 2, 3, 4},
+		Target: 1,
+		Out:    1,
+	},
 }
 
 func Test_search(t *testing.T) {

@@ -1,6 +1,6 @@
 package Q144_Binary_Tree_Preorder_Traversal
 
-//Definition for a binary tree node.
+//TreeNode Definition for a binary tree node.
 type TreeNode struct {
 	Val   int
 	Left  *TreeNode
@@ -13,37 +13,23 @@ func preorderTraversal(root *TreeNode) []int {
 	return iteration(root)
 }
 
-type Stack []*TreeNode
-
-func (s *Stack) Pop() *TreeNode {
-	if s.IsEmpty() {
-		return nil
-	}
-	v := (*s)[len(*s)-1]
-	*s = (*s)[:len(*s)-1]
-	return v
-}
-
-func (s *Stack) Push(n *TreeNode) {
-	*s = append(*s, n)
-}
-
-func (s *Stack) IsEmpty() bool {
-	return len(*s) == 0
-}
-
-//迭代
+//iteration 迭代
 //Runtime: 0 ms, faster than 100.00% of Go online submissions for Binary Tree Preorder Traversal.
 //Memory Usage: 2 MB, less than 100.00% of Go online submissions for Binary Tree Preorder Traversal.
 func iteration(root *TreeNode) []int {
-	s, res := new(Stack), make([]int, 0)
-	for root != nil || !s.IsEmpty() {
-		for root != nil {
+	res := make([]int, 0)
+	list, index := make([]*TreeNode, 100), -1
+	for root != nil || index != -1 {
+		if root != nil {
 			res = append(res, root.Val)
-			s.Push(root)
+			index++
+			list[index] = root
 			root = root.Left
+			continue
 		}
-		root = s.Pop().Right
+		root = list[index].Right
+		list[index] = nil
+		index--
 	}
 	return res
 }

@@ -2,6 +2,7 @@ package Q23_Merge_k_Sorted_Lists
 
 import (
 	"math"
+	"sort"
 )
 
 type ListNode struct {
@@ -41,5 +42,6 @@ func WhoMin(lists []*ListNode) int {
 			min, key = node.Val, k
 		}
 	}
+	sort.Float64s()
 	return key
 }
